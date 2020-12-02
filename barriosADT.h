@@ -1,1 +1,1 @@
-typedef struct barrioCDT *barrioADT;
+typedef struct NHoodCDT *NHoodADT;
