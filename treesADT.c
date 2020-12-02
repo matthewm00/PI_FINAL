@@ -5,13 +5,13 @@
 #include <math.h>
 #include "treesADT.h"
 
-#define BLOQUE 50
+#define BLOCK 50
 
 typedef struct tree
 {
-    char *neighbourhood;
+    char *NHoodName;
     char *name; //nombre cientifico
-    size_t appearences;
+    size_t appearences; // cantidad de apareciones de ese arbol en ese barrio
 } tTree;
 struct node
 {
@@ -32,7 +32,7 @@ static int checkMemory()
 {
     if (errno != ENOMEM)
         return 1;
-    perror("ERROR");
+     perror("MEMORY ERROR");
     errno = 0;
     return 0;
 }
@@ -45,37 +45,47 @@ treeADT newTree()
     return t;
 }
 
-int addTree(treeADT t, const char *name, const char *neighbourhood)
+int addTree(treeADT t, const char *name, const char *NHoodName)
 {
     for (int i = 0; i < t->size; i++)
     {
-        if (strcmp(t->vec[i].name, name) == 0)
+        if (strcmp(t->vec[i].NHoodName, NHoodName) == 0 && strcmp(t->vec[i].name, name) == 0)
         {
             t->vec[i].appearences++;
-
-            /*if (strcmp(t->vec[i].neighbourhood, neighbourhood) == 0)
-            {
-                t->vec[i].appearencesInNeighbourhood++;
-            }
-            */
             return 1;
         }
     }
 
-    if (t->size % BLOQUE == 0)
+    if (t->size % BLOCK == 0)
     {
-        t->vec = realloc(t->vec, (t->size + BLOQUE) * sizeof(tTree));
+        t->vec = realloc(t->vec, (t->size + BLOCK) * sizeof(tTree));
         if (!checkMemory())
             return 0;
+        for (size_t k = t->size; k < t->size + BLOCK; k++) {
+             t->vec[k].appearences = 0;
+        }
     }
 
     t->vec[t->size].name = malloc(strlen(name) + 1);
-    t->vec[t->size].neighbourhood = malloc(strlen(neighbourhood) + 1);
+    t->vec[t->size].NHoodName = malloc(strlen(NHoodName) + 1);
     if (!checkMemory())
         return 0;
     strcpy(t->vec[t->size].name, name);
-    strcpy(t->vec[t->size].neighbourhood, neighbourhood);
+    strcpy(t->vec[t->size].NHoodName, NHoodName);
     t->vec[t->size].appearences = 1;
     t->size++;
     return 1;
+}
+
+
+for (size_t i = 0; i < cantidadBarrios; i++) {
+     if (encuentraBarrio) {
+          int max = 0;
+          int indice;
+          if (max < apearArbol[i]) {
+               max = apearArbol[i];
+               indice = i;
+          }
+          return arbol[indice];
+     }
 }
