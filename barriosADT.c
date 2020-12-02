@@ -6,8 +6,8 @@
 #include "barriosADT.h"
 
 #define BLOQUE 50
-// santi esta haciendo lio
-typedef struct barrio
+
+typedef struct NHood
 {
     char *name;
     size_t habitants;
@@ -15,11 +15,11 @@ typedef struct barrio
     char **treeName;
     size_t *count;
     size_t sizeTreeName;
-} tBarrio;
+} tNHood;
 
 struct node
 {
-    tBarrio barrio;
+    tNHood NHood;
     size_t treesQty; //cantidad de arboles en el barrio
     size_t treesPerHab;
     char **treeName;   //nombres de los arboles que hay en el barrio
@@ -27,38 +27,38 @@ struct node
     char *popularTree; //nombre del arbol + popular del barrio
     struct node *tail;
 };
-typedef struct node *TNodeBarrio;
+typedef struct node *TNodeNHood;
 
-struct barrioCDT
+struct NHoodCDT
 {
-    TNodeBarrio first;   //orden descendente por cantidad de arboles por hab
-    TNodeBarrio current; //para iterar
-    tBarrio *vec;
+    TNodeNHood first;   //orden descendente por cantidad de arboles por hab
+    TNodeNHood current; //para iterar
+    tNHood *vec;
     size_t size;
 };
 static int checkMemory()
 {
     if (errno != ENOMEM)
         return 1;
-    perror("ERROR");
+    perror("MEMORY ERROR");
     errno = 0;
     return 0;
 }
 
-barrioADT newBarrio()
+NHoodADT newNHood()
 {
-    barrioADT barr = calloc(1, sizeof(struct barrioCDT));
+    NHoodADT barr = calloc(1, sizeof(struct NHoodCDT));
     if (!checkMemory())
         return NULL;
     return barr;
 }
 
-int addNeighbourhood(barrioADT barr, const char *name, size_t habitants)
+int addNHood(NHoodADT barr, const char *name, size_t habitants)
 {
 
     if (barr->size % BLOQUE == 0)
     {
-        barr->vec = realloc(barr->vec, (barr->size + BLOQUE) * sizeof(tBarrio));
+        barr->vec = realloc(barr->vec, (barr->size + BLOQUE) * sizeof(tNHood));
         if (!checkMemory())
             return 0;
     }
@@ -71,11 +71,11 @@ int addNeighbourhood(barrioADT barr, const char *name, size_t habitants)
     barr->size++;
     return 1;
 }
-int addTree(barrioADT barr, const char *neighbourhoodName, const char *treeName)
+int addTree(NHoodADT barr, const char *NHoodName, const char *treeName)
 {
     for (int i = 0; i < barr->size; i++)
     {
-        if (strcmp(barr->vec[i].name, neighbourhoodName) == 0)
+        if (strcmp(barr->vec[i].name, NHoodName) == 0)
         {
             barr->vec[i].treeQty++;
             int j;
