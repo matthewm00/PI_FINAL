@@ -5,16 +5,16 @@
 #include <math.h>
 #include "barriosADT.h"
 
-#define BLOQUE 50
+#define BLOCK 50
 
 typedef struct NHood
 {
-    char *name;
+    char *name; // nombre del barrio
     size_t habitants;
-    size_t treeQty;
-    char **treeName;
-    size_t *count;
-    size_t sizeTreeName;
+    size_t treeQty; // total de arboles del barrio
+    char **treeName; // nombres de todos los arboles del barrio
+    size_t *count; // cantidad de apariciones de cada arbol
+    size_t sizeTreeName; // dimension de los dos vecs de arriba
 } tNHood;
 
 struct node
@@ -47,54 +47,62 @@ static int checkMemory()
 
 NHoodADT newNHood()
 {
-    NHoodADT barr = calloc(1, sizeof(struct NHoodCDT));
+    NHoodADT nh = calloc(1, sizeof(struct NHoodCDT));
     if (!checkMemory())
         return NULL;
-    return barr;
+    return nh;
 }
 
-int addNHood(NHoodADT barr, const char *name, size_t habitants)
+int addNHood(NHoodADT nh, const char *name, size_t habitants)
 {
 
-    if (barr->size % BLOQUE == 0)
+    if (nh->size % BLOCK == 0)
     {
-        barr->vec = realloc(barr->vec, (barr->size + BLOQUE) * sizeof(tNHood));
+        nh->vec = realloc(nh->vec, (nh->size + BLOCK) * sizeof(tNHood));
         if (!checkMemory())
             return 0;
     }
 
-    barr->vec[barr->size].name = malloc(strlen(name) + 1);
+    nh->vec[nh->size].name = malloc(strlen(name) + 1);
     if (!checkMemory())
         return 0;
-    strcpy(barr->vec[barr->size].name, name);
-    barr->vec[barr->size].habitants = habitants;
-    barr->size++;
+    strcpy(nh->vec[nh->size].name, name);
+    nh->vec[nh->size].habitants = habitants;
+    nh->vec[nh->size].treeName = malloc(sizeof(char*));
+    nh->vec[nh->size].count = NULL;
+    nh->vec[nh->size].sizeTreeName = 0;
+    nh->vec[nh->size].treeQty = 0;
+    nh->size++;
     return 1;
 }
-int addTree(NHoodADT barr, const char *NHoodName, const char *treeName)
+int addTree(NHoodADT nh, const char *NHoodName, const char *treeName)
 {
-    for (int i = 0; i < barr->size; i++)
+    for (int i = 0; i < nh->size; i++)
     {
-        if (strcmp(barr->vec[i].name, NHoodName) == 0)
+        if (strcmp(nh->vec[i].name, NHoodName) == 0)
         {
-            barr->vec[i].treeQty++;
+            nh->vec[i].treeQty++;
             int j;
-            for (j = 0; j < barr->vec[i].sizeTreeName; j++) //chequeo si esta ese arbol para incrementar su cantidad
+            for (j = 0; j < nh->vec[i].sizeTreeName; j++) //chequeo si esta ese arbol para incrementar su cantidad
             {
-                if (strcmp(barr->vec[i].treeName[j], treeName))
+                if (strcmp(nh->vec[i].treeName[j], treeName) == 0)
                 {
-                    barr->vec[i].count[j]++;
+                    nh->vec[i].count[j]++;
+                    return 1;
                 }
             }
-            if (barr->vec[i].sizeTreeName % BLOQUE == 0)
+            if (nh->vec[i].sizeTreeName % BLOCK == 0)
             {
-                barr->vec[i].treeName = realloc(barr->vec[i].treeName, (barr->vec[i].sizeTreeName + BLOQUE) * sizeof(char *));
-                barr->vec[i].count = realloc(barr->vec[i].count, (barr->vec[i].sizeTreeName + BLOQUE) * sizeof(size_t));
+                nh->vec[i].treeName = realloc(nh->vec[i].treeName, (nh->vec[i].sizeTreeName + BLOCK) * sizeof(char *));
+                nh->vec[i].count = realloc(nh->vec[i].count, (nh->vec[i].sizeTreeName + BLOCK) * sizeof(size_t));
+                for (int k = j; k < j + BLOCK; k++) {
+                     nh->vec[i].count[k] = 0;
+                }
             }
-            barr->vec[i].treeName[j] = malloc(strlen(treeName) + 1);
-            strcpy(barr->vec[i].treeName[j], treeName);
-            barr->vec[i].count[j]++;
-            barr->vec[i].sizeTreeName++;
+            nh->vec[i].treeName[j] = malloc(strlen(treeName) + 1);
+            strcpy(nh->vec[i].treeName[j], treeName);
+            nh->vec[i].count[j]++;
+            nh->vec[i].sizeTreeName++;
 
             return 1;
         }
