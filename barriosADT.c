@@ -6,7 +6,7 @@
 #include "barriosADT.h"
 
 #define BLOQUE 50
-
+// santi esta haciendo lio
 typedef struct barrio
 {
     char *name;
