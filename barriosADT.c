@@ -11,20 +11,27 @@ typedef struct barrio
 {
     char *name;
     size_t habitants;
-    size_t treesPerHab;
+    size_t treeQty;
+    char **treeName;
+    size_t *count;
+    size_t sizeTreeName;
 } tBarrio;
 
 struct node
 {
-    tBarrio barr;
-    char *popularTree; //nombre del arobol + popular del barrio
+    tBarrio barrio;
+    size_t treesQty; //cantidad de arboles en el barrio
+    size_t treesPerHab;
+    char **treeName;   //nombres de los arboles que hay en el barrio
+    size_t *count;     //cant de veces que aparecen dichos arboles
+    char *popularTree; //nombre del arbol + popular del barrio
     struct node *tail;
 };
 typedef struct node *TNodeBarrio;
 
 struct barrioCDT
 {
-    TNodeBarrio first;
+    TNodeBarrio first;   //orden descendente por cantidad de arboles por hab
     TNodeBarrio current; //para iterar
     tBarrio *vec;
     size_t size;
@@ -46,7 +53,7 @@ barrioADT newBarrio()
     return barr;
 }
 
-int addTree(barrioADT barr, const char *name, size_t habitants)
+int addNeighbourhood(barrioADT barr, const char *name, size_t habitants)
 {
 
     if (barr->size % BLOQUE == 0)
@@ -63,4 +70,34 @@ int addTree(barrioADT barr, const char *name, size_t habitants)
     barr->vec[barr->size].habitants = habitants;
     barr->size++;
     return 1;
+}
+int addTree(barrioADT barr, const char *neighbourhoodName, const char *treeName)
+{
+    for (int i = 0; i < barr->size; i++)
+    {
+        if (strcmp(barr->vec[i].name, neighbourhoodName) == 0)
+        {
+            barr->vec[i].treeQty++;
+            int j;
+            for (j = 0; j < barr->vec[i].sizeTreeName; j++) //chequeo si esta ese arbol para incrementar su cantidad
+            {
+                if (strcmp(barr->vec[i].treeName[j], treeName))
+                {
+                    barr->vec[i].count[j]++;
+                }
+            }
+            if (barr->vec[i].sizeTreeName % BLOQUE == 0)
+            {
+                barr->vec[i].treeName = realloc(barr->vec[i].treeName, (barr->vec[i].sizeTreeName + BLOQUE) * sizeof(char *));
+                barr->vec[i].count = realloc(barr->vec[i].count, (barr->vec[i].sizeTreeName + BLOQUE) * sizeof(size_t));
+            }
+            barr->vec[i].treeName[j] = malloc(strlen(treeName) + 1);
+            strcpy(barr->vec[i].treeName[j], treeName);
+            barr->vec[i].count[j]++;
+            barr->vec[i].sizeTreeName++;
+
+            return 1;
+        }
+    }
+    return 0;
 }

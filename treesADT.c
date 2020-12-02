@@ -10,15 +10,12 @@
 typedef struct tree
 {
     char *neighbourhood;
-    char *street;
     char *name; //nombre cientifico
-    size_t diameter;
     size_t appearences;
 } tTree;
 struct node
 {
     tTree tree;
-    float perHabitant; //cant por habitante
     struct node *tail;
 };
 typedef struct node *TNodeTree;
@@ -50,15 +47,21 @@ treeADT newTree()
 
 int addTree(treeADT t, const char *name, const char *neighbourhood)
 {
-    /*for (int i = 0; i < t->size; i++)
+    for (int i = 0; i < t->size; i++)
     {
         if (strcmp(t->vec[i].name, name) == 0)
         {
             t->vec[i].appearences++;
+
+            /*if (strcmp(t->vec[i].neighbourhood, neighbourhood) == 0)
+            {
+                t->vec[i].appearencesInNeighbourhood++;
+            }
+            */
             return 1;
         }
     }
-    */
+
     if (t->size % BLOQUE == 0)
     {
         t->vec = realloc(t->vec, (t->size + BLOQUE) * sizeof(tTree));
