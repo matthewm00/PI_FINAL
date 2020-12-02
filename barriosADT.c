@@ -82,6 +82,7 @@ int addTree(NHoodADT nh, const char *NHoodName, const char *treeName)
         if (strcmp(nh->vec[i].name, NHoodName) == 0)
         {
             nh->vec[i].treeQty++;
+// de aca para abajo no va....??
             int j;
             for (j = 0; j < nh->vec[i].sizeTreeName; j++) //chequeo si esta ese arbol para incrementar su cantidad
             {
