@@ -12,7 +12,7 @@ typedef struct NHood
     char *name; // nombre del barrio
     size_t habitants;
     size_t treeQty; // total de arboles del barrio
-    float treesPerHab;
+    float treesPerHab; // tree/habitants
     char *popularTree;   //nombre del arbol que aparece + veces
     size_t popularCount; //cantidad de veces que aparece
 } tNHood;
@@ -111,43 +111,62 @@ static void treesPerHab(NHoodADT nh)
 }
 static TNodeNHood sortAlph(TNodeNHood first, TNodeNHood new) //ordena alfabeticamente los nodos para la query de los popular trees
 {
-    int c;
-    if (first == NULL || (c = strcmp(first->name, new->name)) > 0)
+    if (first == NULL || strcmp(first->name, new->name) > 0)
     {
         new->tailByPop = first;
         return new;
     }
-    else if (c == 0)
-    {
-        //se cae el sistema?
-        //return...
-    }
     first->tailByPop = sortAlph(first->tailByPop, new);
     return first;
 }
+
+static TNodeNHood createNode(tNHood nh){
+     TNodeNHood new = malloc(sizeof(struct node));
+     new->treesPerHab = nh.treesPerHab;
+     new->name = malloc(strlen(nh.name) + 1);
+     new->popularTree = malloc(strlen(nh.popularTree) + 1);
+     strcpy(new->name, nh.name);
+     strcpy(new->popularTree, nh.popularTree);
+     if (!checkMemory())
+     {
+         free(new);
+         return NULL;
+     }
+     return new;
+}
+
 static TNodeNHood addNode(TNodeNHood firstByHab, NHoodADT nhList, tNHood nh, int *ok) //la idea seria que addNode resuelva los dos queries
 {
     if (firstByHab == NULL || firstByHab->treesPerHab < nh.treesPerHab)
     {
-        TNodeNHood new = malloc(sizeof(struct node));
-        new->treesPerHab = nh.treesPerHab;
-        new->name = malloc(strlen(nh.name) + 1);
-        new->popularTree = malloc(strlen(nh.popularTree) + 1);
-        strcpy(new->name, nh.name);
-        strcpy(new->popularTree, nh.popularTree);
-        if (!checkMemory())
-        {
-            free(new);
-            return firstByHab;
+        TNodeNHood new = createNode(nh);
+        if (new == NULL) {
+             return firstByHab;
         }
         new->tailByHab = firstByHab;
-
         nhList->firstByPop = sortAlph(nhList->firstByPop, new);
-
         *ok = 1;
-
         return new;
     }
+    if (firstByHab->treesPerHab == nh.treesPerHab) {
+         TNodeNHood new = createNode(nh);
+         if (new == NULL) {
+              return firstByHab;
+         }
+         *ok = 1;
+         nhList->firstByPop = sortAlph(nhList->firstByPop, new);
+         if (strcmp(firstByHab->name, nh.name) > 0) {
+             new->tailByHab = firstByHab;
+             return new;
+        }else{
+             TNodeNHood aux = firstByHab->tailByHab;
+             firstByHab->tailByHab = new;
+             new->tailByHab = aux;
+             return firstByHab;
+        }
+    }
+    firstByHab->tailByHab = addNode(firstByHab->tailByHab, nhList, nh, ok);
+    return firstByHab;
 }
 int NHoodList(NHoodADT nh)
 {
