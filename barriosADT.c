@@ -12,27 +12,29 @@ typedef struct NHood
     char *name; // nombre del barrio
     size_t habitants;
     size_t treeQty; // total de arboles del barrio
-    char **treeName; // nombres de todos los arboles del barrio
-    size_t *count; // cantidad de apariciones de cada arbol
-    size_t sizeTreeName; // dimension de los dos vecs de arriba
+    float treesPerHab;
+    char *popularTree;   //nombre del arbol que aparece + veces
+    size_t popularCount; //cantidad de veces que aparece
 } tNHood;
 
 struct node
 {
     tNHood NHood;
     size_t treesQty; //cantidad de arboles en el barrio
-    size_t treesPerHab;
-    char **treeName;   //nombres de los arboles que hay en el barrio
-    size_t *count;     //cant de veces que aparecen dichos arboles
-    char *popularTree; //nombre del arbol + popular del barrio
-    struct node *tail;
+    double treesPerHab;
+    char *popularTree;   //nombre del arbol que aparece + veces
+    size_t popularCount; //cantidad de veces que aparece
+    struct node *tailByHab;
+    struct node *tailByPop;
 };
 typedef struct node *TNodeNHood;
 
 struct NHoodCDT
 {
-    TNodeNHood first;   //orden descendente por cantidad de arboles por hab
-    TNodeNHood current; //para iterar
+    TNodeNHood firstByHab;    //orden descendente segun total arboles/habitantes, luego alfabetico por nombre de barrio
+    TNodeNHood firstByPop;    //alfabetico por nombre de barrio
+    TNodeNHood currentPerHab; //para iterar
+    TNodeNHood currentByPop;
     tNHood *vec;
     size_t size;
 };
@@ -68,45 +70,58 @@ int addNHood(NHoodADT nh, const char *name, size_t habitants)
         return 0;
     strcpy(nh->vec[nh->size].name, name);
     nh->vec[nh->size].habitants = habitants;
-    nh->vec[nh->size].treeName = malloc(sizeof(char*));
-    nh->vec[nh->size].count = NULL;
-    nh->vec[nh->size].sizeTreeName = 0;
     nh->vec[nh->size].treeQty = 0;
+    nh->vec[nh->size].popularTree = NULL;
+    nh->vec[nh->size].popularCount = 0;
     nh->size++;
     return 1;
 }
-int addTree(NHoodADT nh, const char *NHoodName, const char *treeName)
+int addTree(NHoodADT nh, const char *NHoodName, const char *treeName, size_t appearences)
 {
     for (int i = 0; i < nh->size; i++)
     {
         if (strcmp(nh->vec[i].name, NHoodName) == 0)
         {
             nh->vec[i].treeQty++;
-// de aca para abajo no va....??
-            int j;
-            for (j = 0; j < nh->vec[i].sizeTreeName; j++) //chequeo si esta ese arbol para incrementar su cantidad
+            // de aca para abajo no va....??
+            if (nh->vec[i].popularCount < appearences)
             {
-                if (strcmp(nh->vec[i].treeName[j], treeName) == 0)
-                {
-                    nh->vec[i].count[j]++;
-                    return 1;
-                }
+                nh->vec[i].popularTree = realloc(nh->vec[i].popularTree, strlen(treeName) + 1);
+                strcpy(nh->vec[i].popularTree, treeName);
+                nh->vec[i].popularCount = appearences;
             }
-            if (nh->vec[i].sizeTreeName % BLOCK == 0)
-            {
-                nh->vec[i].treeName = realloc(nh->vec[i].treeName, (nh->vec[i].sizeTreeName + BLOCK) * sizeof(char *));
-                nh->vec[i].count = realloc(nh->vec[i].count, (nh->vec[i].sizeTreeName + BLOCK) * sizeof(size_t));
-                for (int k = j; k < j + BLOCK; k++) {
-                     nh->vec[i].count[k] = 0;
-                }
-            }
-            nh->vec[i].treeName[j] = malloc(strlen(treeName) + 1);
-            strcpy(nh->vec[i].treeName[j], treeName);
-            nh->vec[i].count[j]++;
-            nh->vec[i].sizeTreeName++;
 
             return 1;
         }
     }
     return 0;
+}
+static void treesPerHab(NHoodADT nh)
+{
+    for (int i = 0; i < nh->size; i++)
+    {
+        double ans;
+        if (nh->vec[i].habitants == 0)
+            ans = 0;
+        else
+        {
+            ans = ((int)(((double)nh->vec[i].treeQty / (double)nh->vec[i].habitants) * 100)) / 100.0;
+            //trunca el valor treesPerHab a dos decimales
+        }
+        nh->vec[i].treesPerHab = ans;
+    }
+}
+static TNodeNHood addNode(TNodeNHood first, tNHood nh, int *ok) //la idea seria que addNode resuelva los dos queries
+{
+}
+int NHoodList(NHoodADT nh)
+{
+    treesPerHab(nh);
+    for (int i = 0; i < nh->size; i++)
+    {
+        int ok = 0;
+        nh->firstByHab = addNode(nh->firstByHab, nh->vec[i], &ok);
+        if (!ok)
+            return 0;
+    }
 }
