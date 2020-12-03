@@ -19,11 +19,9 @@ typedef struct NHood
 
 struct node
 {
-    tNHood NHood;
-    size_t treesQty; //cantidad de arboles en el barrio
+    char *name;
     double treesPerHab;
-    char *popularTree;   //nombre del arbol que aparece + veces
-    size_t popularCount; //cantidad de veces que aparece
+    char *popularTree; //nombre del arbol que aparece + veces
     struct node *tailByHab;
     struct node *tailByPop;
 };
@@ -83,7 +81,7 @@ int addTree(NHoodADT nh, const char *NHoodName, const char *treeName, size_t app
         if (strcmp(nh->vec[i].name, NHoodName) == 0)
         {
             nh->vec[i].treeQty++;
-            // de aca para abajo no va....??
+
             if (nh->vec[i].popularCount < appearences)
             {
                 nh->vec[i].popularTree = realloc(nh->vec[i].popularTree, strlen(treeName) + 1);
@@ -111,8 +109,45 @@ static void treesPerHab(NHoodADT nh)
         nh->vec[i].treesPerHab = ans;
     }
 }
-static TNodeNHood addNode(TNodeNHood first, tNHood nh, int *ok) //la idea seria que addNode resuelva los dos queries
+static TNodeNHood sortAlph(TNodeNHood first, TNodeNHood new) //ordena alfabeticamente los nodos para la query de los popular trees
 {
+    int c;
+    if (first == NULL || (c = strcmp(first->name, new->name)) > 0)
+    {
+        new->tailByPop = first;
+        return new;
+    }
+    else if (c == 0)
+    {
+        //se cae el sistema?
+        //return...
+    }
+    first->tailByPop = sortAlph(first->tailByPop, new);
+    return first;
+}
+static TNodeNHood addNode(TNodeNHood firstByHab, NHoodADT nhList, tNHood nh, int *ok) //la idea seria que addNode resuelva los dos queries
+{
+    if (firstByHab == NULL || firstByHab->treesPerHab < nh.treesPerHab)
+    {
+        TNodeNHood new = malloc(sizeof(struct node));
+        new->treesPerHab = nh.treesPerHab;
+        new->name = malloc(strlen(nh.name) + 1);
+        new->popularTree = malloc(strlen(nh.popularTree) + 1);
+        strcpy(new->name, nh.name);
+        strcpy(new->popularTree, nh.popularTree);
+        if (!checkMemory())
+        {
+            free(new);
+            return firstByHab;
+        }
+        new->tailByHab = firstByHab;
+
+        nhList->firstByPop = sortAlph(nhList->firstByPop, new);
+
+        *ok = 1;
+
+        return new;
+    }
 }
 int NHoodList(NHoodADT nh)
 {
@@ -120,7 +155,7 @@ int NHoodList(NHoodADT nh)
     for (int i = 0; i < nh->size; i++)
     {
         int ok = 0;
-        nh->firstByHab = addNode(nh->firstByHab, nh->vec[i], &ok);
+        nh->firstByHab = addNode(nh->firstByHab, nh, nh->vec[i], &ok);
         if (!ok)
             return 0;
     }
