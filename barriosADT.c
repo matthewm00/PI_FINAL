@@ -31,7 +31,7 @@ struct NHoodCDT
 {
     TNodeNHood firstByHab;    //orden descendente segun total arboles/habitantes, luego alfabetico por nombre de barrio
     TNodeNHood firstByPop;    //alfabetico por nombre de barrio
-    TNodeNHood currentPerHab; //para iterar
+    TNodeNHood currentByHab; //para iterar
     TNodeNHood currentByPop;
     tNHood *vec;
     size_t size;
@@ -51,6 +51,62 @@ NHoodADT newNHood()
     if (!checkMemory())
         return NULL;
     return nh;
+}
+
+static void freeNode(TNodeNHood first) {
+     if (first == NULL) {
+          return;
+     }
+     freeNode(first->tailByHab);
+     free(first);
+}
+
+static void freeVec(tNHood * vec, size_t size) {
+     for (size_t i = 0; i < size; i++) {
+          free(vec[i].name);
+          free(vec[i].popularTree);
+     }
+     free(vec);
+}
+
+void freeNHoodList(NHoodADT nhList){
+     freeVec(vec, nhList->size);
+     freeNode(nhList->firstByHab);
+     free(nhList);
+}
+
+void toBeginByHab(NHoodADT nhList) {
+     nhList->currentByHab = nhList->firstByHab;
+}
+
+void toBeginByPop(NHoodADT nhList) {
+     nhList->currentByPop = nhList->firstByPop;
+}
+
+int hasNextByHab(NHoodADT nhList){
+     return nhList->currentByHab != NULL;
+}
+
+int hasNextByPop(NHoodADT nhList){
+     return nhList->currentByPop != NULL;
+}
+
+void nextByHab(NHoodADT nhList, char* NHoodName, double treesPerHab){
+     if (!hasNextByHab(nhList)) {
+          return; // lo dejamos asi o ponemos todo en NULL y eso
+     }
+     strcpy(NHoodName, nhList->currentByHab->name);
+     treesPerHab = nhList->currentByHab->treesPerHab;
+     nhList->currentByHab = nhList->currentByHab->tailByHab;
+}
+
+void nextByPop(NHoodADT nhList, char* NHoodName, char* popularTree){
+     if (!hasNextByPop(nhList)) {
+          return; // lo dejamos asi o ponemos todo en NULL y eso
+     }
+     strcpy(NHoodName, nhList->currentByPop->name);
+     strcpy(popularTree, nhList->currentByPop->popularTree);
+     nhList->currentByPop = nhList->currentByPop->tailByPop;
 }
 
 int addNHood(NHoodADT nh, const char *name, size_t habitants)
