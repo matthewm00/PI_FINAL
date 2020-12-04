@@ -36,3 +36,5 @@ void toBeginByPop(NHoodADT nhList);
 int hasNextByPop(NHoodADT nhList);
 
 void nextByPop(NHoodADT nhList, char *NHoodName, char *popularTree);
+
+void freeNHoodVec(NHoodADT nh);

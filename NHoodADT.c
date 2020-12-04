@@ -185,6 +185,8 @@ int NHoodList(NHoodADT nh)
         if (!ok)
             return 0;
     }
+    freeNHoodVec(nh);
+    return 1;
 }
 
 static void freeNode(TNodeNHood first)
@@ -197,19 +199,18 @@ static void freeNode(TNodeNHood first)
     free(first);
 }
 
-static void freeVec(tNHood *vec, size_t size)
+void freeNHoodVec(NHoodADT nh)
 {
-    for (size_t i = 0; i < size; i++)
+    for (size_t i = 0; i < nh->size; i++)
     {
-        free(vec[i].name);
-        free(vec[i].popularTree);
+        free(nh->vec[i].name);
+        free(nh->vec[i].popularTree);
     }
-    free(vec);
+    free(nh->vec);
 }
 
 void freeNHoodList(NHoodADT nhList)
 {
-    freeVec(nhList->vec, nhList->size);
     freeNode(nhList->firstByHab);
     free(nhList);
 }

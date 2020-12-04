@@ -26,7 +26,7 @@ void readNHood(const char *file, NHoodADT nHood)
 			strcpy(habs, strtok(NULL, delim));
 			if (!addNHood(nHood, nHoodName, atol(habs)))
 			{
-				freeCiudad(nHood);
+				freeNHoodVec(nHood);
 				exit(2);
 			}
 		}
@@ -66,10 +66,11 @@ void readTree(const char *file, NHoodADT nh, treeADT t, size_t flag, size_t cNHo
 				{
 					strcpy(treeName, aux);
 				}
-				//aux = strtok(NULL, ";");
+				strtok(NULL, delim);
 				if (!addTree(t, treeName, nHoodName))
 				{
-					freeTree(t);
+					freeTreeVec(t);
+					freeNHoodVec(nh);
 					freeNHoodList(nh);
 					exit(2);
 				}
@@ -79,7 +80,8 @@ void readTree(const char *file, NHoodADT nh, treeADT t, size_t flag, size_t cNHo
 	fclose(dataFlow);
 	if (!treesToNHoods(t, nh))
 	{
-		freeTree(t);
+		freeTreeVec(t);
+		freeNHoodVec(nh);
 		freeNHoodList(nh);
 		exit(2);
 	}

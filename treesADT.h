@@ -15,3 +15,4 @@ char *getNHoodName(treeADT t, int index);
 char *getTreeName(treeADT t, int index);
 int getTreeAppearences(treeADT t, int index);
 size_t getSize(treeADT t);
+void freeTreeVec(treeADT t);
