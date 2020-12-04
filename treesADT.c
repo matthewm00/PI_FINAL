@@ -13,17 +13,9 @@ typedef struct tree
     char *name; //nombre cientifico
     size_t appearences; // cantidad de apareciones de ese arbol en ese barrio
 } tTree;
-struct node
-{
-    tTree tree;
-    struct node *tail;
-};
-typedef struct node *TNodeTree;
 
 struct treeCDT
 {
-    TNodeTree first;
-    TNodeTree current; //para iterar
     tTree *vec;
     size_t size;
 };
@@ -32,7 +24,7 @@ static int checkMemory()
 {
     if (errno != ENOMEM)
         return 1;
-     perror("MEMORY ERROR");
+     perror("ERROR");
     errno = 0;
     return 0;
 }
@@ -77,15 +69,10 @@ int addTree(treeADT t, const char *name, const char *NHoodName)
     return 1;
 }
 
-
-for (size_t i = 0; i < cantidadBarrios; i++) {
-     if (encuentraBarrio) {
-          int max = 0;
-          int indice;
-          if (max < apearArbol[i]) {
-               max = apearArbol[i];
-               indice = i;
-          }
-          return arbol[indice];
+void freeTree(treeADT t){
+     for (size_t i = 0; i < t->size; i++) {
+          free(t->vec[i].name);
+          free(t->vec[i].NHoodName);
      }
+     free(t);
 }
