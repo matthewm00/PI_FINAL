@@ -84,22 +84,11 @@ void readTree(const char *file, NHoodADT nh, treeADT t, size_t flag, size_t cNHo
 		exit(2);
 	}
 }
-/*
-static int treesToNHoods1(treeADT t, NHoodADT nh)
-{
-	for (int i = 0; i < t->size; i++)
-	{
-		if (!addTreeToNHood(nh, t->vec[i].NHoodName, t->vec[i].name, t->vec[i].appearences))
-		{
-			return 0;
-		}
-	}
-	return 1;
-}
-*/
+
 static int treesToNHoods(treeADT t, NHoodADT nh)
 {
-	for (int i = 0; i < size(t); i++)
+	size_t treeSize = getSize(t);
+	for (int i = 0; i < treeSize; i++)
 	{
 		if (!addTreeToNHood(nh, getNHoodName(t, i), getTreeName(t, i), getTreeAppearences(t, i)))
 		{

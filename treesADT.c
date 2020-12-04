@@ -94,3 +94,7 @@ int getTreeAppearences(treeADT t, int index)
 
     return t->vec[index].appearences;
 }
+size_t getSize(treeADT t)
+{
+    return t->size;
+}
