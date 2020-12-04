@@ -11,8 +11,8 @@ typedef struct NHood
 {
     char *name; // nombre del barrio
     size_t habitants;
-    size_t treeQty; // total de arboles del barrio
-    float treesPerHab; // tree/habitants
+    size_t treeQty;      // total de arboles del barrio
+    float treesPerHab;   // tree/habitants
     char *popularTree;   //nombre del arbol que aparece + veces
     size_t popularCount; //cantidad de veces que aparece
 } tNHood;
@@ -29,8 +29,8 @@ typedef struct node *TNodeNHood;
 
 struct NHoodCDT
 {
-    TNodeNHood firstByHab;    //orden descendente segun total arboles/habitantes, luego alfabetico por nombre de barrio
-    TNodeNHood firstByPop;    //alfabetico por nombre de barrio
+    TNodeNHood firstByHab;   //orden descendente segun total arboles/habitantes, luego alfabetico por nombre de barrio
+    TNodeNHood firstByPop;   //alfabetico por nombre de barrio
     TNodeNHood currentByHab; //para iterar
     TNodeNHood currentByPop;
     tNHood *vec;
@@ -120,19 +120,20 @@ static TNodeNHood sortAlph(TNodeNHood first, TNodeNHood new) //ordena alfabetica
     return first;
 }
 
-static TNodeNHood createNode(tNHood nh){
-     TNodeNHood new = malloc(sizeof(struct node));
-     new->treesPerHab = nh.treesPerHab;
-     new->name = malloc(strlen(nh.name) + 1);
-     new->popularTree = malloc(strlen(nh.popularTree) + 1);
-     strcpy(new->name, nh.name);
-     strcpy(new->popularTree, nh.popularTree);
-     if (!checkMemory())
-     {
-         free(new);
-         return NULL;
-     }
-     return new;
+static TNodeNHood createNode(tNHood nh)
+{
+    TNodeNHood new = malloc(sizeof(struct node));
+    new->treesPerHab = nh.treesPerHab;
+    new->name = malloc(strlen(nh.name) + 1);
+    new->popularTree = malloc(strlen(nh.popularTree) + 1);
+    strcpy(new->name, nh.name);
+    strcpy(new->popularTree, nh.popularTree);
+    if (!checkMemory())
+    {
+        free(new);
+        return NULL;
+    }
+    return new;
 }
 
 static TNodeNHood addNode(TNodeNHood firstByHab, NHoodADT nhList, tNHood nh, int *ok) //la idea seria que addNode resuelva los dos queries
@@ -140,29 +141,35 @@ static TNodeNHood addNode(TNodeNHood firstByHab, NHoodADT nhList, tNHood nh, int
     if (firstByHab == NULL || firstByHab->treesPerHab < nh.treesPerHab)
     {
         TNodeNHood new = createNode(nh);
-        if (new == NULL) {
-             return firstByHab;
+        if (new == NULL)
+        {
+            return firstByHab;
         }
         new->tailByHab = firstByHab;
         nhList->firstByPop = sortAlph(nhList->firstByPop, new);
         *ok = 1;
         return new;
     }
-    if (firstByHab->treesPerHab == nh.treesPerHab) {
-         TNodeNHood new = createNode(nh);
-         if (new == NULL) {
-              return firstByHab;
-         }
-         *ok = 1;
-         nhList->firstByPop = sortAlph(nhList->firstByPop, new);
-         if (strcmp(firstByHab->name, nh.name) > 0) {
-             new->tailByHab = firstByHab;
-             return new;
-        }else{
-             TNodeNHood aux = firstByHab->tailByHab;
-             firstByHab->tailByHab = new;
-             new->tailByHab = aux;
-             return firstByHab;
+    if (firstByHab->treesPerHab == nh.treesPerHab)
+    {
+        TNodeNHood new = createNode(nh);
+        if (new == NULL)
+        {
+            return firstByHab;
+        }
+        *ok = 1;
+        nhList->firstByPop = sortAlph(nhList->firstByPop, new);
+        if (strcmp(firstByHab->name, nh.name) > 0)
+        {
+            new->tailByHab = firstByHab;
+            return new;
+        }
+        else
+        {
+            TNodeNHood aux = firstByHab->tailByHab;
+            firstByHab->tailByHab = new;
+            new->tailByHab = aux;
+            return firstByHab;
         }
     }
     firstByHab->tailByHab = addNode(firstByHab->tailByHab, nhList, nh, ok);
@@ -180,58 +187,71 @@ int NHoodList(NHoodADT nh)
     }
 }
 
-static void freeNode(TNodeNHood first) {
-     if (first == NULL) {
-          return;
-     }
-     freeNode(first->tailByHab);
-     free(first);
+static void freeNode(TNodeNHood first)
+{
+    if (first == NULL)
+    {
+        return;
+    }
+    freeNode(first->tailByHab);
+    free(first);
 }
 
-static void freeVec(tNHood * vec, size_t size) {
-     for (size_t i = 0; i < size; i++) {
-          free(vec[i].name);
-          free(vec[i].popularTree);
-     }
-     free(vec);
+static void freeVec(tNHood *vec, size_t size)
+{
+    for (size_t i = 0; i < size; i++)
+    {
+        free(vec[i].name);
+        free(vec[i].popularTree);
+    }
+    free(vec);
 }
 
-void freeNHoodList(NHoodADT nhList){
-     freeVec(vec, nhList->size);
-     freeNode(nhList->firstByHab);
-     free(nhList);
+void freeNHoodList(NHoodADT nhList)
+{
+    freeVec(nhList->vec, nhList->size);
+    freeNode(nhList->firstByHab);
+    free(nhList);
 }
 
-void toBeginByHab(NHoodADT nhList) {
-     nhList->currentByHab = nhList->firstByHab;
+void toBeginByHab(NHoodADT nhList)
+{
+    nhList->currentByHab = nhList->firstByHab;
 }
 
-void toBeginByPop(NHoodADT nhList) {
-     nhList->currentByPop = nhList->firstByPop;
+void toBeginByPop(NHoodADT nhList)
+{
+    nhList->currentByPop = nhList->firstByPop;
 }
 
-int hasNextByHab(NHoodADT nhList){
-     return nhList->currentByHab != NULL;
+int hasNextByHab(NHoodADT nhList)
+{
+    return nhList->currentByHab != NULL;
 }
 
-int hasNextByPop(NHoodADT nhList){
-     return nhList->currentByPop != NULL;
+int hasNextByPop(NHoodADT nhList)
+{
+    return nhList->currentByPop != NULL;
 }
 
-void nextByHab(NHoodADT nhList, char* NHoodName, double treesPerHab){
-     if (!hasNextByHab(nhList)) {
-          return; // lo dejamos asi o ponemos todo en NULL y eso
-     }
-     strcpy(NHoodName, nhList->currentByHab->name);
-     treesPerHab = nhList->currentByHab->treesPerHab;
-     nhList->currentByHab = nhList->currentByHab->tailByHab;
+void nextByHab(NHoodADT nhList, char *NHoodName, double treesPerHab)
+{
+    if (!hasNextByHab(nhList))
+    {
+        return; // lo dejamos asi o ponemos todo en NULL y eso
+    }
+    strcpy(NHoodName, nhList->currentByHab->name);
+    treesPerHab = nhList->currentByHab->treesPerHab;
+    nhList->currentByHab = nhList->currentByHab->tailByHab;
 }
 
-void nextByPop(NHoodADT nhList, char* NHoodName, char* popularTree){
-     if (!hasNextByPop(nhList)) {
-          return; // lo dejamos asi o ponemos todo en NULL y eso
-     }
-     strcpy(NHoodName, nhList->currentByPop->name);
-     strcpy(popularTree, nhList->currentByPop->popularTree);
-     nhList->currentByPop = nhList->currentByPop->tailByPop;
+void nextByPop(NHoodADT nhList, char *NHoodName, char *popularTree)
+{
+    if (!hasNextByPop(nhList))
+    {
+        return; // lo dejamos asi o ponemos todo en NULL y eso
+    }
+    strcpy(NHoodName, nhList->currentByPop->name);
+    strcpy(popularTree, nhList->currentByPop->popularTree);
+    nhList->currentByPop = nhList->currentByPop->tailByPop;
 }

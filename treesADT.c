@@ -10,20 +10,14 @@
 typedef struct tree
 {
     char *NHoodName;
-    char *name; //nombre cientifico
+    char *name;         //nombre cientifico
     size_t appearences; // cantidad de apareciones de ese arbol en ese barrio
 } tTree;
-struct node
-{
-    tTree tree;
-    struct node *tail;
-};
+
 typedef struct node *TNodeTree;
 
 struct treeCDT
 {
-    TNodeTree first;
-    TNodeTree current; //para iterar
     tTree *vec;
     size_t size;
 };
@@ -32,7 +26,7 @@ static int checkMemory()
 {
     if (errno != ENOMEM)
         return 1;
-     perror("MEMORY ERROR");
+    perror("MEMORY ERROR");
     errno = 0;
     return 0;
 }
@@ -61,8 +55,9 @@ int addTree(treeADT t, const char *name, const char *NHoodName)
         t->vec = realloc(t->vec, (t->size + BLOCK) * sizeof(tTree));
         if (!checkMemory())
             return 0;
-        for (size_t k = t->size; k < t->size + BLOCK; k++) {
-             t->vec[k].appearences = 0;
+        for (size_t k = t->size; k < t->size + BLOCK; k++)
+        {
+            t->vec[k].appearences = 0;
         }
     }
 
@@ -75,17 +70,4 @@ int addTree(treeADT t, const char *name, const char *NHoodName)
     t->vec[t->size].appearences = 1;
     t->size++;
     return 1;
-}
-
-
-for (size_t i = 0; i < cantidadBarrios; i++) {
-     if (encuentraBarrio) {
-          int max = 0;
-          int indice;
-          if (max < apearArbol[i]) {
-               max = apearArbol[i];
-               indice = i;
-          }
-          return arbol[indice];
-     }
 }
