@@ -15,4 +15,4 @@
 
 void readNHood(const char *file, NHoodADT nHood);
 
-void readTree(const char *file, NHoodADT nh, treeADT t, size_t flag, size_t cNHood, size_t cTree);
+void readTree(const char *file, NHoodADT nh, treeADT t, size_t cNHood, size_t cTree);

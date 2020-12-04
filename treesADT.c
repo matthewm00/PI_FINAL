@@ -101,7 +101,7 @@ size_t getSize(treeADT t)
 
 void freeTreeVec(treeADT t) {
      for (size_t i = 0; i < t->size; i++) {
-          free(t->vec[i].nHoodName);
+          free(t->vec[i].NHoodName);
           free(t->vec[i].name);
      }
      free(t->vec);

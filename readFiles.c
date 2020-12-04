@@ -34,7 +34,7 @@ void readNHood(const char *file, NHoodADT nHood)
 	fclose(dataFlow);
 }
 
-void readTree(const char *file, NHoodADT nh, treeADT t, size_t flag, size_t cNHood, size_t cTree)
+void readTree(const char *file, NHoodADT nh, treeADT t, size_t cNHood, size_t cTree)
 {
 	char aux[MAX_LONG];
 	const char delim[2] = ";";
