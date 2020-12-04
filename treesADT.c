@@ -14,8 +14,6 @@ typedef struct tree
     size_t appearences; // cantidad de apareciones de ese arbol en ese barrio
 } tTree;
 
-typedef struct node *TNodeTree;
-
 struct treeCDT
 {
     tTree *vec;
@@ -70,4 +68,29 @@ int addTree(treeADT t, const char *name, const char *NHoodName)
     t->vec[t->size].appearences = 1;
     t->size++;
     return 1;
+}
+static int checkIndex(treeADT t, int index)
+{
+    return index < t->size;
+}
+char *getNHoodName(treeADT t, int index)
+{
+    if (!checkIndex(t, index))
+        return NULL;
+
+    return t->vec[index].NHoodName;
+}
+char *getTreeName(treeADT t, int index)
+{
+    if (!checkIndex(t, index))
+        return NULL;
+
+    return t->vec[index].name;
+}
+int getTreeAppearences(treeADT t, int index)
+{
+    if (!checkIndex(t, index))
+        return 0;
+
+    return t->vec[index].appearences;
 }

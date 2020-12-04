@@ -1,3 +1,5 @@
+
+
 typedef struct NHoodCDT *NHoodADT;
 
 //devuelve un nuevo y vacio NHoodADT
