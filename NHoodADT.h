@@ -7,7 +7,7 @@ NHoodADT newNHood();
 int addNHood(NHoodADT nh, const char *name, size_t habitants);
 
 //agrega un arbol a un barrio contenido en el vector
-int addTree(NHoodADT nh, const char *NHoodName, const char *treeName, size_t appearences);
+int addTreeToNHood(NHoodADT nh, const char *NHoodName, const char *treeName, size_t appearences);
 
 /*crea una lista de barrios, ordenada de dos formas distintas:
 **la 1era es por orden descendente segun el total de arboles/habitantes
