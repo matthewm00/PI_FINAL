@@ -3,7 +3,7 @@
 #include <string.h>
 #include <errno.h>
 #include <math.h>
-#include "NHoodADT.h"
+#include "barriosADT.h"
 
 #define BLOCK 50
 
@@ -40,7 +40,7 @@ static int checkMemory()
 {
     if (errno != ENOMEM)
         return 1;
-    perror("ERROR");
+    perror("MEMORY ERROR");
     errno = 0;
     return 0;
 }
@@ -74,7 +74,7 @@ int addNHood(NHoodADT nh, const char *name, size_t habitants)
     nh->size++;
     return 1;
 }
-int addTreeToNHood(NHoodADT nh, const char *NHoodName, const char *treeName, size_t appearences)
+int addTree(NHoodADT nh, const char *NHoodName, const char *treeName, size_t appearences)
 {
     for (int i = 0; i < nh->size; i++)
     {
