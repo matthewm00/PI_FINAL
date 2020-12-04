@@ -94,20 +94,17 @@ int addTreeToNHood(NHoodADT nh, const char *NHoodName, const char *treeName, siz
     }
     return 0;
 }
-static void treesPerHab(NHoodADT nh)
+static void treesPerHab(NHoodADT nh, int index)
 {
-    for (int i = 0; i < nh->size; i++)
+    double ans;
+    if (nh->vec[index].habitants == 0)
+        ans = 0;
+    else
     {
-        double ans;
-        if (nh->vec[i].habitants == 0)
-            ans = 0;
-        else
-        {
-            ans = ((int)(((double)nh->vec[i].treeQty / (double)nh->vec[i].habitants) * 100)) / 100.0;
-            //trunca el valor treesPerHab a dos decimales
-        }
-        nh->vec[i].treesPerHab = ans;
+        ans = ((int)(((double)nh->vec[index].treeQty / (double)nh->vec[index].habitants) * 100)) / 100.0;
+        //trunca el valor treesPerHab a dos decimales
     }
+    nh->vec[index].treesPerHab = ans;
 }
 static TNodeNHood sortAlph(TNodeNHood first, TNodeNHood new) //ordena alfabeticamente los nodos para la query de los popular trees
 {
@@ -177,9 +174,9 @@ static TNodeNHood addNode(TNodeNHood firstByHab, NHoodADT nhList, tNHood nh, int
 }
 int NHoodList(NHoodADT nh)
 {
-    treesPerHab(nh);
     for (int i = 0; i < nh->size; i++)
     {
+        treesPerHab(nh, i);
         int ok = 0;
         nh->firstByHab = addNode(nh->firstByHab, nh, nh->vec[i], &ok);
         if (!ok)
@@ -235,14 +232,14 @@ int hasNextByPop(NHoodADT nhList)
     return nhList->currentByPop != NULL;
 }
 
-void nextByHab(NHoodADT nhList, char *NHoodName, double treesPerHab)
+void nextByHab(NHoodADT nhList, char *NHoodName, double *treesPerHab)
 {
     if (!hasNextByHab(nhList))
     {
         return; // lo dejamos asi o ponemos todo en NULL y eso
     }
     strcpy(NHoodName, nhList->currentByHab->name);
-    treesPerHab = nhList->currentByHab->treesPerHab;
+    *treesPerHab = nhList->currentByHab->treesPerHab;
     nhList->currentByHab = nhList->currentByHab->tailByHab;
 }
 

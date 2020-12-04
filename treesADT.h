@@ -9,10 +9,9 @@ treeADT newTree();
 int addTree(treeADT t, const char *name, const char *NHoodName);
 
 //libera el espacio en memoria utilizado
-void freeTree(treeADT t);
+void freeTreeVec(treeADT t);
 
 char *getNHoodName(treeADT t, int index);
 char *getTreeName(treeADT t, int index);
 int getTreeAppearences(treeADT t, int index);
 size_t getSize(treeADT t);
-void freeTreeVec(treeADT t);

@@ -44,7 +44,7 @@ void readTree(const char *file, NHoodADT nh, treeADT t, size_t cNHood, size_t cT
 	FILE *dataFlow = fopen(file, "r"); // apertura del archivo de arboles
 	if (dataFlow == NULL)
 	{
-		printf("Error en la apertura del archivo\n");
+		printf("Error in input file\n");
 		exit(1);
 	}
 	if (!feof(dataFlow))
