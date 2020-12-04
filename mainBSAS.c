@@ -14,22 +14,6 @@ int main(int argc, char const *argv[]) {
           printf("Cantidad incorrecta de argumentos introducidos\n");
           return 1;
      }
-     // ciudadADT newciudad = nuevaCiudad();
-     NHoodADT NHood = newNHood();
-     if (!checkMemory()) {
-          return 1; // revisar que retornar
-     }
-     // leeBarrios(argv[2], newciudad);
-     FILE *trees, *nHoods, *query1BUE, *query2BUE;
-     // ordenarBarrios(newciudad);
-     //
-     // leeArboles(argv[1], newciudad, BUE, CAMPO_COMUNA, CAMPO_ESPECIE, CAMPO_DIAM);
-     //
-     // generarQuery(newciudad,QUERY1);
-     // generarQuery(newciudad,QUERY2);
-     // generarQuery(newciudad,QUERY3);
-     //
-     // freeCiudad(newciudad);
-     // printf("Se han generado los archivos correctamente\n");
+
      return 0;
 }
