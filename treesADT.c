@@ -1,10 +1,5 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <errno.h>
-#include <math.h>
+
 #include "treesADT.h"
-#include "errors.h"
 
 #define BLOCK 50
 

@@ -1,5 +1,4 @@
 #include "readFiles.h"
-#include "errors.h"
 
 int readNHood(const char *file, NHoodADT nHood)
 {

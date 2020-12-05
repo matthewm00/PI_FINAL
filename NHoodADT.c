@@ -1,8 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <errno.h>
-#include <math.h>
+
 #include "NHoodADT.h"
 
 #define BLOCK 50
@@ -225,7 +221,7 @@ void nextByHab(NHoodADT nhList, char *NHoodName, double *treesPerHab)
 {
     if (!hasNextByHab(nhList))
     {
-        return; // lo dejamos asi o ponemos todo en NULL y eso
+        return;
     }
     strcpy(NHoodName, nhList->currentByHab->name);
     *treesPerHab = nhList->currentByHab->treesPerHab;
@@ -236,7 +232,7 @@ void nextByPop(NHoodADT nhList, char *NHoodName, char *popularTree)
 {
     if (!hasNextByPop(nhList))
     {
-        return; // lo dejamos asi o ponemos todo en NULL y eso
+        return;
     }
     strcpy(NHoodName, nhList->currentByPop->name);
     strcpy(popularTree, nhList->currentByPop->popularTree);

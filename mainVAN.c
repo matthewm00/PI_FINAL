@@ -1,4 +1,4 @@
-#include "errors.h"
+
 #include "queries.h"
 
 #define COL_NHOOD 13
