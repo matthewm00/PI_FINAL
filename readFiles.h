@@ -13,6 +13,6 @@
 #define MAX_NHOOD 8
 #define MAX_NAME_TREES 64
 
-void readNHood(const char *file, NHoodADT nHood);
+int readNHood(const char *file, NHoodADT nHood);
 
-void readTree(const char *file, NHoodADT nh, treeADT t, size_t cNHood, size_t cTree);
+int readTree(const char *file, NHoodADT nh, treeADT t, size_t cNHood, size_t cTree);

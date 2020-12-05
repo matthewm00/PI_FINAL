@@ -4,6 +4,7 @@
 #include <errno.h>
 #include <math.h>
 #include "treesADT.h"
+#include "errors.h"
 
 #define BLOCK 50
 
@@ -19,15 +20,6 @@ struct treeCDT
     tTree *vec;
     size_t size;
 };
-
-static int checkMemory()
-{
-    if (errno != ENOMEM)
-        return 1;
-    perror("MEMORY ERROR");
-    errno = 0;
-    return 0;
-}
 
 treeADT newTree()
 {
@@ -53,7 +45,7 @@ int addTree(treeADT t, const char *name, const char *NHoodName)
         t->vec = realloc(t->vec, (t->size + BLOCK) * sizeof(tTree));
         if (!checkMemory())
             return 0;
-        for (size_t k = t->size; k < t->size + BLOCK; k++)
+        for (int k = t->size; k < t->size + BLOCK; k++)
         {
             t->vec[k].appearences = 0;
         }
@@ -61,8 +53,10 @@ int addTree(treeADT t, const char *name, const char *NHoodName)
 
     t->vec[t->size].name = malloc(strlen(name) + 1);
     t->vec[t->size].NHoodName = malloc(strlen(NHoodName) + 1);
-    if (!checkMemory())
+
+    if (!checkMemory()) //mensaje de falta de memoria?
         return 0;
+
     strcpy(t->vec[t->size].name, name);
     strcpy(t->vec[t->size].NHoodName, NHoodName);
     t->vec[t->size].appearences = 1;

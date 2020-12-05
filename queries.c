@@ -1,10 +1,10 @@
 
 #include "queries.h"
 
-#define NHOOD_NAME 6
+#define NHOOD_NAME 64
 #define TREE_NAME 64
 
-void addToQuery(NHoodADT nh, FILE *query, int num)
+void createQuery(NHoodADT nh, FILE *query, int num)
 {
     if (num == 1)
     {

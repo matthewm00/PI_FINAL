@@ -36,14 +36,6 @@ struct NHoodCDT
     tNHood *vec;
     size_t size;
 };
-static int checkMemory()
-{
-    if (errno != ENOMEM)
-        return 1;
-    perror("ERROR");
-    errno = 0;
-    return 0;
-}
 
 NHoodADT newNHood()
 {
@@ -74,7 +66,7 @@ int addNHood(NHoodADT nh, const char *name, size_t habitants)
     nh->size++;
     return 1;
 }
-int addTreeToNHood(NHoodADT nh, const char *NHoodName, const char *treeName, size_t appearences)
+void addTreeToNHood(NHoodADT nh, const char *NHoodName, const char *treeName, size_t appearences)
 {
     for (int i = 0; i < nh->size; i++)
     {
@@ -88,11 +80,9 @@ int addTreeToNHood(NHoodADT nh, const char *NHoodName, const char *treeName, siz
                 strcpy(nh->vec[i].popularTree, treeName);
                 nh->vec[i].popularCount = appearences;
             }
-
-            return 1;
+            return;
         }
     }
-    return 0;
 }
 static void treesPerHab(NHoodADT nh, int index)
 {
@@ -182,7 +172,6 @@ int NHoodList(NHoodADT nh)
         if (!ok)
             return 0;
     }
-    freeNHoodVec(nh);
     return 1;
 }
 
