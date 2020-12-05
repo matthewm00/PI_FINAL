@@ -20,3 +20,5 @@
 int readNHood(const char *file, NHoodADT nHood);
 
 int readTree(const char *file, NHoodADT nh, treeADT t, size_t cNHood, size_t cTree);
+
+void treesToNHoods(treeADT t, NHoodADT nh);

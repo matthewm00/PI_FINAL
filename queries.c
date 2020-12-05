@@ -33,15 +33,6 @@ void createQuery(NHoodADT nh, FILE *query, int num)
     fclose(query);
 }
 
-int checkMemory(void)
-{
-    if (errno != ENOMEM)
-        return 1;
-    perror("Error ");
-    errno = 0;
-    return 0;
-}
-
 void doFrees(NHoodADT nh, treeADT tree)
 {
     freeNHoodList(nh);

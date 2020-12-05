@@ -16,6 +16,15 @@ struct treeCDT
     size_t size;
 };
 
+static int checkMemory(void)
+{
+    if (errno != ENOMEM)
+        return 1;
+    perror("Error: ");
+    errno = 0;
+    return 0;
+}
+
 treeADT newTree()
 {
     treeADT t = calloc(1, sizeof(struct treeCDT));
