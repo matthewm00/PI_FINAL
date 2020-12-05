@@ -79,7 +79,7 @@ int readTree(const char *file, NHoodADT nh, treeADT t, size_t cNHood, size_t cTr
 	return OK;
 }
 
-static void treesToNHoods(treeADT t, NHoodADT nh)
+void treesToNHoods(treeADT t, NHoodADT nh)
 {
 	size_t treeSize = getSize(t);
 	for (int i = 0; i < treeSize; i++)
