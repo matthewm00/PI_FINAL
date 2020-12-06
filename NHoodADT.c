@@ -8,7 +8,7 @@ typedef struct NHood
     char *name; // nombre del barrio
     size_t habitants;
     size_t treeQty;      // total de arboles del barrio
-    float treesPerHab;   // tree/habitants
+    double treesPerHab;  // tree/habitants
     char *popularTree;   //nombre del arbol que aparece + veces
     size_t popularCount; //cantidad de veces que aparece
 } tNHood;
@@ -16,7 +16,7 @@ typedef struct NHood
 struct node
 {
     char *name;
-    float treesPerHab;
+    double treesPerHab;
     char *popularTree; //nombre del arbol que aparece + veces
     struct node *tailByHab;
     struct node *tailByPop;
@@ -83,7 +83,7 @@ void addTreeToNHood(NHoodADT nh, const char *NHoodName, const char *treeName, si
     {
         if (strcmp(nh->vec[i].name, NHoodName) == 0)
         {
-            nh->vec[i].treeQty++;
+            nh->vec[i].treeQty += appearences;
 
             if (nh->vec[i].popularCount < appearences)
             {
@@ -97,18 +97,27 @@ void addTreeToNHood(NHoodADT nh, const char *NHoodName, const char *treeName, si
 }
 static void treesPerHab(NHoodADT nh, int index)
 {
-    float ans;
+    double ans;
     if (nh->vec[index].habitants == 0)
         ans = 0;
     else
     {
-        ans = ((float)nh->vec[index].treeQty / (float)nh->vec[index].habitants);
+        ans = nh->vec[index].treeQty / nh->vec[index].habitants;
+        ans *= 100;
+        ans = (int)ans / 100.0;
     }
     nh->vec[index].treesPerHab = ans;
 }
+static int compare(char *s1, char *s2)
+{
+    if (isdigit(s1[0]))
+        return atoi(s1) - atoi(s2);
+    else
+        return strcmp(s1, s2);
+}
 static TNodeNHood sortAlph(TNodeNHood first, TNodeNHood new) //ordena alfabeticamente los nodos para la query de los popular trees
 {
-    if (first == NULL || strcmp(first->name, new->name) > 0)
+    if (first == NULL || compare(first->name, new->name) > 0)
     {
         new->tailByPop = first;
         return new;
@@ -157,12 +166,7 @@ static TNodeNHood addNode(TNodeNHood firstByHab, NHoodADT nhList, tNHood nh, int
         *ok = 1;
         nhList->firstByPop = sortAlph(nhList->firstByPop, new);
 
-        if (isdigit(firstByHab->name[0] - '0') && (atoi(firstByHab->name[0]) - atoi(nh.name)) > 0)
-        {
-            new->tailByHab = firstByHab;
-            return new;
-        }
-        else if (strcmp(firstByHab->name, nh.name) > 0)
+        if (compare(firstByHab->name, new->name) > 0)
         {
             new->tailByHab = firstByHab;
             return new;
