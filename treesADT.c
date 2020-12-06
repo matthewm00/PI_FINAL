@@ -58,7 +58,7 @@ int addTree(treeADT t, const char *name, const char *NHoodName)
     t->vec[t->size].name = malloc(strlen(name) + 1);
     t->vec[t->size].NHoodName = malloc(strlen(NHoodName) + 1);
 
-    if (!checkMemory()) //mensaje de falta de memoria?
+    if (!checkMemory())
         return 0;
 
     strcpy(t->vec[t->size].name, name);

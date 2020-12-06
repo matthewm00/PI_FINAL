@@ -103,7 +103,6 @@ static void treesPerHab(NHoodADT nh, int index)
     else
     {
         ans = ((int)(((double)nh->vec[index].treeQty / (double)nh->vec[index].habitants) * 100)) / 100.0;
-        //trunca el valor treesPerHab a dos decimales
     }
     nh->vec[index].treesPerHab = ans;
 }
@@ -192,8 +191,14 @@ static void freeNode(TNodeNHood first)
     {
         return;
     }
-    freeNode(first->tailByHab);
+    freeNode(first->tailByPop);
     free(first);
+}
+
+void freeNHoodList(NHoodADT nhList)
+{
+    freeNode(nhList->firstByPop);
+    free(nhList);
 }
 
 void freeNHoodVec(NHoodADT nh)
@@ -204,12 +209,6 @@ void freeNHoodVec(NHoodADT nh)
         free(nh->vec[i].popularTree);
     }
     free(nh->vec);
-}
-
-void freeNHoodList(NHoodADT nhList)
-{
-    freeNode(nhList->firstByHab);
-    free(nhList);
 }
 
 void toBeginByHab(NHoodADT nhList)

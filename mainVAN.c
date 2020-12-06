@@ -21,7 +21,6 @@ int main(int argc, char const *argv[])
         freeTreeVec(tree);
         return EXIT_FAILURE;
     }
-
     int r;
     r = readNHood(argv[2], nh);
     if (r == FILE_ERROR)
@@ -49,7 +48,6 @@ int main(int argc, char const *argv[])
         doFrees(nh, tree);
         return EXIT_FAILURE;
     }
-
     if (!NHoodList(nh))
     {
         fprintf(stderr, "Memory error\n");
