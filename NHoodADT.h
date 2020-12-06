@@ -3,6 +3,7 @@
 #include <string.h>
 #include <errno.h>
 #include <math.h>
+#include <ctype.h>
 
 typedef struct NHoodCDT *NHoodADT;
 
@@ -32,7 +33,7 @@ void toBeginByHab(NHoodADT nhList);
 int hasNextByHab(NHoodADT nhList);
 
 //setea valores en los parametros de salida y avanza en la iteracion
-void nextByHab(NHoodADT nhList, char *NHoodName, double *treesPerHab);
+void nextByHab(NHoodADT nhList, char *NHoodName, float *treesPerHab);
 
 //idem para la 2da forma del tipo de recorrido de la lista
 void toBeginByPop(NHoodADT nhList);

@@ -10,12 +10,12 @@ void createQuery(NHoodADT nh, FILE *query, int num)
     {
         fprintf(query, "BARRIO;ARBOLES_POR_HABITANTE\n");
         char NHoodName[NHOOD_NAME];
-        double treesPerHab;
+        float treesPerHab;
         toBeginByHab(nh);
         while (hasNextByHab(nh))
         {
             nextByHab(nh, NHoodName, &treesPerHab);
-            fprintf(query, "%s;%g\n", NHoodName, treesPerHab);
+            fprintf(query, "%s;%.2f\n", NHoodName, treesPerHab);
         }
     }
     else

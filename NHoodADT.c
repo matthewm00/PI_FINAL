@@ -16,7 +16,7 @@ typedef struct NHood
 struct node
 {
     char *name;
-    double treesPerHab;
+    float treesPerHab;
     char *popularTree; //nombre del arbol que aparece + veces
     struct node *tailByHab;
     struct node *tailByPop;
@@ -97,12 +97,12 @@ void addTreeToNHood(NHoodADT nh, const char *NHoodName, const char *treeName, si
 }
 static void treesPerHab(NHoodADT nh, int index)
 {
-    double ans;
+    float ans;
     if (nh->vec[index].habitants == 0)
         ans = 0;
     else
     {
-        ans = ((int)(((double)nh->vec[index].treeQty / (double)nh->vec[index].habitants) * 100)) / 100.0;
+        ans = ((float)nh->vec[index].treeQty / (float)nh->vec[index].habitants);
     }
     nh->vec[index].treesPerHab = ans;
 }
@@ -156,7 +156,13 @@ static TNodeNHood addNode(TNodeNHood firstByHab, NHoodADT nhList, tNHood nh, int
         }
         *ok = 1;
         nhList->firstByPop = sortAlph(nhList->firstByPop, new);
-        if (strcmp(firstByHab->name, nh.name) > 0)
+
+        if (isdigit(firstByHab->name[0] - '0') && (atoi(firstByHab->name[0]) - atoi(nh.name)) > 0)
+        {
+            new->tailByHab = firstByHab;
+            return new;
+        }
+        else if (strcmp(firstByHab->name, nh.name) > 0)
         {
             new->tailByHab = firstByHab;
             return new;
@@ -192,6 +198,8 @@ static void freeNode(TNodeNHood first)
         return;
     }
     freeNode(first->tailByPop);
+    free(first->name);
+    free(first->popularTree);
     free(first);
 }
 
@@ -231,7 +239,7 @@ int hasNextByPop(NHoodADT nhList)
     return nhList->currentByPop != NULL;
 }
 
-void nextByHab(NHoodADT nhList, char *NHoodName, double *treesPerHab)
+void nextByHab(NHoodADT nhList, char *NHoodName, float *treesPerHab)
 {
     if (!hasNextByHab(nhList))
     {
