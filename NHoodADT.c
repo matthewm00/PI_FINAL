@@ -102,9 +102,7 @@ static void treesPerHab(NHoodADT nh, int index)
         ans = 0;
     else
     {
-        ans = nh->vec[index].treeQty / nh->vec[index].habitants;
-        ans *= 100;
-        ans = (int)ans / 100.0;
+        ans = ((int)(((double)nh->vec[index].treeQty / (double)nh->vec[index].habitants) * 100)) / 100.0;
     }
     nh->vec[index].treesPerHab = ans;
 }

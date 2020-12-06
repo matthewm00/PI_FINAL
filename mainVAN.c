@@ -2,7 +2,7 @@
 #include "queries.h"
 
 #define COL_NHOOD 13
-#define COL_TREE_NAME 5
+#define COL_TREE_NAME 7
 
 int main(int argc, char const *argv[])
 {
