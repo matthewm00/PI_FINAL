@@ -35,7 +35,7 @@ void createQuery(NHoodADT nh, FILE *query, int num)
 
 void doFrees(NHoodADT nh, treeADT tree)
 {
-    freeNHoodList(nh);
     freeNHoodVec(nh);
+    freeNHoodList(nh);
     freeTreeVec(tree);
 }

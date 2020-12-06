@@ -4,25 +4,26 @@ int readNHood(const char *file, NHoodADT nHood)
 {
 	char aux[MAX_LONG];
 	const char delim[2] = ";";
-	char nHoodName[MAX_NHOOD];
-	char habs[MAX_NHOOD];
+	char *nHoodName;
+	char *habs;
 
-	FILE *dataFlow = fopen(file, "r"); // apertura del archivo de barrios
+	FILE *dataFlow = fopen(file, "r");
 	if (dataFlow == NULL)
 	{
+		printf("aca\n");
 		return FILE_ERROR;
 	}
 	if (!feof(dataFlow))
-		// fgets(aux, MAX_LONG, dataFlow); // Descartamos la primer linea
-		// no seria mejor usar fseek para saltear la 1er linea
-		fseek(dataFlow, MAX_LONG, SEEK_SET);
+		fgets(aux, MAX_LONG, dataFlow); // Salteamos la primer linea
+										// no seria mejor usar fseek para saltear la 1er linea
+										//fseek(dataFlow, MAX_LONG, SEEK_SET);
 	while (!feof(dataFlow))
 	{
 		fgets(aux, MAX_LONG, dataFlow);
 		if (!feof(dataFlow))
 		{
-			strcpy(nHoodName, strtok(aux, delim));
-			strcpy(habs, strtok(NULL, delim));
+			nHoodName = strtok(aux, delim);
+			habs = strtok(NULL, delim);
 			if (!addNHood(nHood, nHoodName, atol(habs)))
 			{
 				return MEM_ERROR;
@@ -37,8 +38,8 @@ int readTree(const char *file, NHoodADT nh, treeADT t, size_t cNHood, size_t cTr
 {
 	char aux[MAX_LONG];
 	const char delim[2] = ";";
-	char nHoodName[MAX_NHOOD];
-	char treeName[MAX_NAME_TREES];
+	char *nHoodName;
+	char *treeName;
 
 	FILE *dataFlow = fopen(file, "r"); // apertura del archivo de arboles
 	if (dataFlow == NULL)
@@ -46,7 +47,7 @@ int readTree(const char *file, NHoodADT nh, treeADT t, size_t cNHood, size_t cTr
 		return FILE_ERROR;
 	}
 	if (!feof(dataFlow))
-		fgets(aux, MAX_LONG, dataFlow); // Descartamos la primer linea
+		fgets(aux, MAX_LONG, dataFlow); // Salteamos la primer linea
 
 	while (!feof(dataFlow))
 	{
@@ -58,17 +59,18 @@ int readTree(const char *file, NHoodADT nh, treeADT t, size_t cNHood, size_t cTr
 			{
 				if (i == cNHood - 1)
 				{
-					strcpy(nHoodName, aux);
+					nHoodName = strtok(NULL, delim);
 				}
-				if (i == cTree - 1)
+				else if (i == cTree - 1)
 				{
-					strcpy(treeName, aux);
+					treeName = strtok(NULL, delim);
 				}
-				strtok(NULL, delim);
-				if (!addTree(t, treeName, nHoodName))
-				{
-					return MEM_ERROR;
-				}
+				else
+					strtok(NULL, delim);
+			}
+			if (!addTree(t, treeName, nHoodName))
+			{
+				return MEM_ERROR;
 			}
 		}
 	}

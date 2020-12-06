@@ -58,6 +58,12 @@ int addNHood(NHoodADT nh, const char *name, size_t habitants)
         nh->vec = realloc(nh->vec, (nh->size + BLOCK) * sizeof(tNHood));
         if (!checkMemory())
             return 0;
+        for (int i = nh->size; i < nh->size + BLOCK; i++)
+        {
+            nh->vec[i].popularTree = NULL;
+            nh->vec[i].popularCount = 0;
+            nh->vec[i].treeQty = 0;
+        }
     }
 
     nh->vec[nh->size].name = malloc(strlen(name) + 1);
@@ -192,7 +198,7 @@ static void freeNode(TNodeNHood first)
 
 void freeNHoodVec(NHoodADT nh)
 {
-    for (size_t i = 0; i < nh->size; i++)
+    for (int i = 0; i < nh->size; i++)
     {
         free(nh->vec[i].name);
         free(nh->vec[i].popularTree);

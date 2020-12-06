@@ -21,7 +21,6 @@ int main(int argc, char const *argv[])
           freeTreeVec(tree);
           return EXIT_FAILURE;
      }
-
      int r;
      r = readNHood(argv[2], nh);
      if (r == FILE_ERROR)
