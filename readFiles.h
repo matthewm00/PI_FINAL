@@ -17,8 +17,11 @@
 #define FILE_ERROR 0
 #define MEM_ERROR 2
 
+//Copia la info del dataset en un vector presente en la estructura a la que apunta nHood
 int readNHood(const char *file, NHoodADT nHood);
 
+/*Copia solamente la info del dataset que nos interesa (nombre del arbol y el nombre del barrio en donde se encuentra)
+**en un vector presente en la estructura a la que apunta t
+**los dos ultimos parametros sirven para identificar en que columnas estan esos datos
+*/
 int readTree(const char *file, NHoodADT nh, treeADT t, size_t cNHood, size_t cTree);
-
-void treesToNHoods(treeADT t, NHoodADT nh);

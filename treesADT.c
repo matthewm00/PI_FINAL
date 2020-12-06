@@ -5,9 +5,9 @@
 
 typedef struct tree
 {
-    char *NHoodName;
-    char *name;         //nombre cientifico
-    size_t appearences; // cantidad de apareciones de ese arbol en ese barrio
+    char *NHoodName;    //nombre del barrio
+    char *name;         //nombre del arbol
+    size_t appearences; //cantidad de apariciones de ese arbol en ese barrio
 } tTree;
 
 struct treeCDT

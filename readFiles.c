@@ -7,15 +7,13 @@ int readNHood(const char *file, NHoodADT nHood)
 	char *nHoodName;
 	char *habs;
 
-	FILE *dataFlow = fopen(file, "r");
+	FILE *dataFlow = fopen(file, "r"); //Abrimos el archivo de barrios
 	if (dataFlow == NULL)
 	{
 		return FILE_ERROR;
 	}
 	if (!feof(dataFlow))
-		fgets(aux, MAX_LONG, dataFlow); // Salteamos la primer linea
-										// no seria mejor usar fseek para saltear la 1er linea
-										//fseek(dataFlow, MAX_LONG, SEEK_SET);
+		fgets(aux, MAX_LONG, dataFlow); //Salteamos la primer linea
 	while (!feof(dataFlow))
 	{
 		fgets(aux, MAX_LONG, dataFlow);
@@ -33,6 +31,23 @@ int readNHood(const char *file, NHoodADT nHood)
 	return OK;
 }
 
+// Envia la informacion necesaria recopilada en readTree (explicita en los nombres de las funciones get)
+// a la estructura de los barrios
+static void treesToNHoods(treeADT t, NHoodADT nh)
+{
+	size_t treeSize = getSize(t);
+	for (int i = 0; i < treeSize; i++)
+	{
+		char *NHoodName = getNHoodName(t, i);
+		char *treeName = getTreeName(t, i);
+		size_t ap = getTreeAppearences(t, i);
+
+		//Funcion presente en NHoodADT.c que agrega solamente los arboles pertenecientes a los barrios
+		//que figuran en los archivos de barrios CSV
+		addTreeToNHood(nh, NHoodName, treeName, ap);
+	}
+}
+
 int readTree(const char *file, NHoodADT nh, treeADT t, size_t cNHood, size_t cTree)
 {
 	char aux[MAX_LONG];
@@ -40,17 +55,18 @@ int readTree(const char *file, NHoodADT nh, treeADT t, size_t cNHood, size_t cTr
 	char *nHoodName;
 	char *treeName;
 
-	FILE *dataFlow = fopen(file, "r"); // apertura del archivo de arboles
+	FILE *dataFlow = fopen(file, "r"); //Abrimos el archivo de arboles
 	if (dataFlow == NULL)
 	{
 		return FILE_ERROR;
 	}
 	if (!feof(dataFlow))
-		fgets(aux, MAX_LONG, dataFlow); // Salteamos la primer linea
+		fgets(aux, MAX_LONG, dataFlow); //Salteamos la primer linea
 
 	while (!feof(dataFlow))
 	{
 		fgets(aux, MAX_LONG, dataFlow);
+
 		if (!feof(dataFlow))
 		{
 			strtok(aux, delim);
@@ -80,19 +96,4 @@ int readTree(const char *file, NHoodADT nh, treeADT t, size_t cNHood, size_t cTr
 	treesToNHoods(t, nh);
 
 	return OK;
-}
-
-void treesToNHoods(treeADT t, NHoodADT nh)
-{
-	size_t treeSize = getSize(t);
-	for (int i = 0; i < treeSize; i++)
-	{
-		char *NHoodName = getNHoodName(t, i);
-		char *treeName = getTreeName(t, i);
-		size_t ap = getTreeAppearences(t, i);
-
-		//funcion presente en el NHoodADT que agrega solamente los arboles pertenecientes a los barrios
-		//que figuran en los archivos de barrios csv
-		addTreeToNHood(nh, NHoodName, treeName, ap);
-	}
 }
